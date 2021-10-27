@@ -37,14 +37,8 @@ module.exports = {
 
       const match = await bcrypt.compare(password, user.password);
       if (match) {
-        await User.delete();
+        await user.delete();
       }
-
-      return {
-        ...user._doc,
-        id: user._id,
-        token,
-      };
     },
     async login(_, { username, password }) {
       const { errors, valid } = validateLoginInput(username, password);
