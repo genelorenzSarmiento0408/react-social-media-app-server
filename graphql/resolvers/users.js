@@ -44,12 +44,15 @@ module.exports = {
       }
       password = await bcrypt.hash(newPassword, 12);
       // newPassword = password;
-
-      const token = generateToken(user);
+      const newUser = new User({
+        password,
+      });
+      const res = await newUser.save();
+      const token = generateToken(res);
 
       return {
-        ...user._doc,
-        id: user._id,
+        ...res._doc,
+        id: res._id,
         token,
       };
     },
