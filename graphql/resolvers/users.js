@@ -27,25 +27,30 @@ module.exports = {
     /// ----------------------------------> editPassword <-------------------------------------------- ///
     async editpassword(
       _,
-      { newPasswordInput: { password, newPassword }, context },
+      { newPasswordInput: { password, newPassword, username } },
     ) {
-      try {
-        const user = checkAuth(context);
+      const { errors, valid } = validateLoginInput(username, password);
+      const user = await User.findOne({ username });
 
-        if (user.password == password) {
-          newPassword = password;
-          password = await bcrypt.hash(password, 12);
+      if (!valid) {
+        throw new UserInputError("Errors", { errors });
+      }
 
-          // const newPass = new password(newPassword);
-          // const res = await newPass.save();
-          // return {
-          //   ...res._doc,
-          //   id: res._id,
-          //   token,
-          // };
-        }
-      } catch (err) {
-        throw new Error(err);
+      if (!user) {
+        errors.general = "User not found";
+        throw new UserInputError("User not found", { errors });
+      }
+      if (user.password == password) {
+        newPassword = password;
+        password = await bcrypt.hash(password, 12);
+
+        // const newPass = new password(newPassword);
+        // const res = await newPass.save();
+        // return {
+        //   ...res._doc,
+        //   id: res._id,
+        //   token,
+        // };
       }
     },
     /// ----------------------------------> deleteUser <-------------------------------------------- ///
@@ -60,13 +65,10 @@ module.exports = {
         errors.general = "User not found";
         throw new UserInputError("User not found", { errors });
       }
-      try {
-        const match = await bcrypt.compare(password, user.password);
-        if (match) {
-          await user.delete();
-        }
-      } catch (err) {
-        throw new Error(err);
+
+      const match = await bcrypt.compare(password, user.password);
+      if (match) {
+        await user.delete();
       }
     },
     /// ----------------------------------> LOGIN <-------------------------------------------- ///

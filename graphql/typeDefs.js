@@ -31,6 +31,7 @@ module.exports = gql`
     createdAt: String!
   }
   input NewPasswordInput {
+    username: String!
     password: String!
     newPassword: String!
   }
