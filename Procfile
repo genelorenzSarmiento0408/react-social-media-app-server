@@ -1,1 +1,1 @@
-web: bin/start-nginx-solo && npm start
+web: NODE_ENV=development && npm start
