@@ -29,17 +29,23 @@ module.exports = {
       _,
       { newPasswrordInput: { password, newPassword }, context },
     ) {
-      const user = checkAuth(context);
-      console.log(user.username);
-      if (user.password === password) {
-        password = await bcrypt.hash(password, 12);
-        const newPass = new password(newPassword);
-        const res = await newPass.save();
-        return {
-          ...res._doc,
-          id: res._id,
-          token,
-        };
+      try {
+        const user = checkAuth(context);
+        console.log(user.username);
+        if (user.password == password) {
+          newPassword = password;
+          password = await bcrypt.hash(password, 12);
+
+          // const newPass = new password(newPassword);
+          // const res = await newPass.save();
+          // return {
+          //   ...res._doc,
+          //   id: res._id,
+          //   token,
+          // };
+        }
+      } catch (err) {
+        throw new Error(err);
       }
     },
     /// ----------------------------------> deleteUser <-------------------------------------------- ///
