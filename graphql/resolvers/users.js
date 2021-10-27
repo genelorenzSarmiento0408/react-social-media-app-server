@@ -27,7 +27,7 @@ module.exports = {
     /// ----------------------------------> editPassword <-------------------------------------------- ///
     async editpassword(
       _,
-      { newPasswrordInput: { password, newPassword }, context },
+      { newPasswordInput: { password, newPassword }, context },
     ) {
       try {
         const user = checkAuth(context);
