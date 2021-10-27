@@ -29,6 +29,7 @@ module.exports = {
       const user = checkAuth(context);
       console.log(user.username);
       if (user.password === password) {
+        password = await bcrypt.hash(password, 12);
         const newPass = new password(newPassword);
         const res = await newPass.save();
         return {
