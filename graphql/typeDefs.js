@@ -30,11 +30,7 @@ module.exports = gql`
     username: String!
     createdAt: String!
   }
-  input NewPasswordInput {
-    username: String!
-    password: String!
-    newPassword: String!
-  }
+
   input RegisterInput {
     username: String!
     password: String!
@@ -54,6 +50,10 @@ module.exports = gql`
     createComment(postId: String!, body: String!): Post!
     deleteComment(postId: ID!, commentId: ID!): Post!
     likePost(postId: ID!): Post!
-    editpassword(newPasswordInput: NewPasswordInput): User!
+    editpassword(
+      username: String!
+      password: String!
+      newPassword: String!
+    ): User!
   }
 `;

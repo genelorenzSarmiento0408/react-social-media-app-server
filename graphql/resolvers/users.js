@@ -25,10 +25,7 @@ function generateToken(user) {
 module.exports = {
   Mutation: {
     /// ----------------------------------> editPassword <-------------------------------------------- ///
-    async editpassword(
-      _,
-      { newPasswordInput: { password, newPassword, username } },
-    ) {
+    async editpassword(_, { password, newPassword, username }) {
       const { errors, valid } = validateLoginInput(username, password);
       const user = await User.findOne({ username });
 
@@ -52,6 +49,11 @@ module.exports = {
         //   token,
         // };
       }
+      return {
+        ...user._doc,
+        id: user._id,
+        token,
+      };
     },
     /// ----------------------------------> deleteUser <-------------------------------------------- ///
     async deleteUser(_, { username, password }) {
