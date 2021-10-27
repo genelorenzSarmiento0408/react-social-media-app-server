@@ -1,6 +1,6 @@
 {
-  "name": "lorenz-social-media-app",
-  "version": "0.1.1b",
+  "name": "lorenz-social-media-app-server",
+  "version": "0.1.2beta",
   "description": "",
   "main": "index.js",
   "scripts": {
