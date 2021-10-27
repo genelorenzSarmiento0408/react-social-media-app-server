@@ -40,20 +40,14 @@ module.exports = {
       if (user.password == password) {
         newPassword = password;
         password = await bcrypt.hash(password, 12);
+        const token = generateToken(user);
 
-        // const newPass = new password(newPassword);
-        // const res = await newPass.save();
-        // return {
-        //   ...res._doc,
-        //   id: res._id,
-        //   token,
-        // };
+        return {
+          ...user._doc,
+          id: user._id,
+          token,
+        };
       }
-      return {
-        ...user._doc,
-        id: user._id,
-        token,
-      };
     },
     /// ----------------------------------> deleteUser <-------------------------------------------- ///
     async deleteUser(_, { username, password }) {
