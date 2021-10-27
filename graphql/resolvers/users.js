@@ -34,10 +34,13 @@ module.exports = {
         errors.general = "User not found";
         throw new UserInputError("User not found", { errors });
       }
-
-      const match = await bcrypt.compare(password, user.password);
-      if (match) {
-        await user.delete();
+      try {
+        const match = await bcrypt.compare(password, user.password);
+        if (match) {
+          await user.delete();
+        }
+      } catch (err) {
+        throw new Error(err);
       }
     },
     async login(_, { username, password }) {
