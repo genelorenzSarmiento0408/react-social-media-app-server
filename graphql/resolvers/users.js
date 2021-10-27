@@ -23,6 +23,29 @@ function generateToken(user) {
 
 module.exports = {
   Mutation: {
+    async deleteUser(_, { username, password }) {
+      const { errors, valid } = validateLoginInput(username, password);
+      const user = await User.findOne({ username });
+
+      if (!valid) {
+        throw new UserInputError("Errors", { errors });
+      }
+      if (!user) {
+        errors.general = "User not found";
+        throw new UserInputError("User not found", { errors });
+      }
+
+      const match = await bcrypt.compare(password, user.password);
+      if (match) {
+        await User.delete();
+      }
+
+      return {
+        ...user._doc,
+        id: user._id,
+        token,
+      };
+    },
     async login(_, { username, password }) {
       const { errors, valid } = validateLoginInput(username, password);
       //if the user is valid in validators

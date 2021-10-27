@@ -1,6 +1,6 @@
 {
-  "name": "merng",
-  "version": "1.0.0",
+  "name": "lorenz-social-media-app",
+  "version": "0.1.1b",
   "description": "",
   "main": "index.js",
   "scripts": {
