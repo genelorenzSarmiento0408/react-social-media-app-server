@@ -28,6 +28,7 @@ module.exports = {
     async editpassword(_, { password, newPassword, username }) {
       const { errors, valid } = validateLoginInput(username, password);
       const user = await User.findOne({ username });
+      const match = await bcrypt.compare(password, user.password);
 
       if (!valid) {
         throw new UserInputError("Errors", { errors });
@@ -37,7 +38,7 @@ module.exports = {
         errors.general = "User not found";
         throw new UserInputError("User not found", { errors });
       }
-      if (user.password == password) {
+      if (match) {
         newPassword = password;
         password = await bcrypt.hash(password, 12);
         const token = generateToken(user);
