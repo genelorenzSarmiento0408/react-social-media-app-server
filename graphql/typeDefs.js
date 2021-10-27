@@ -53,6 +53,6 @@ module.exports = gql`
     createComment(postId: String!, body: String!): Post!
     deleteComment(postId: ID!, commentId: ID!): Post!
     likePost(postId: ID!): Post!
-    editpassword(newPasswrordInput: NewPasswrordInput): User!
+    editpassword(newPasswordInput: NewPasswrordInput): User!
   }
 `;

@@ -25,7 +25,10 @@ function generateToken(user) {
 module.exports = {
   Mutation: {
     /// ----------------------------------> editPassword <-------------------------------------------- ///
-    async editpassword(_, { newPasswrordInput: { password, newPassword } }) {
+    async editpassword(
+      _,
+      { newPasswrordInput: { password, newPassword }, context },
+    ) {
       const user = checkAuth(context);
       console.log(user.username);
       if (user.password === password) {
