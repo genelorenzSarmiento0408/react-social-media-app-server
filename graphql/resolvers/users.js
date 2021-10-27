@@ -45,6 +45,7 @@ module.exports = {
       password = await bcrypt.hash(newPassword, 12);
       // newPassword = password;
       const newUser = new User({
+        username,
         password,
       });
       const res = await newUser.save();
