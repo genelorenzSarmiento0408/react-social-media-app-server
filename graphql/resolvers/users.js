@@ -38,17 +38,20 @@ module.exports = {
         errors.general = "User not found";
         throw new UserInputError("User not found", { errors });
       }
-      if (match) {
-        newPassword = password;
-        password = await bcrypt.hash(password, 12);
-        const token = generateToken(user);
-
-        return {
-          ...user._doc,
-          id: user._id,
-          token,
-        };
+      if (!match) {
+        errors.general = "Wrong username or password";
+        throw new UserInputError("Wrong username or  password", { errors });
       }
+      password = await bcrypt.hash(newPassword, 12);
+      // newPassword = password;
+
+      const token = generateToken(user);
+
+      return {
+        ...user._doc,
+        id: user._id,
+        token,
+      };
     },
     /// ----------------------------------> deleteUser <-------------------------------------------- ///
     async deleteUser(_, { username, password }) {
