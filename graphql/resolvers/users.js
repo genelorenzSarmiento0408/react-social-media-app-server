@@ -1,7 +1,6 @@
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const { UserInputError } = require("apollo-server");
-const checkAuth = require("../../util/check-auth");
 
 const {
   validateRegisterInput,
@@ -42,18 +41,11 @@ module.exports = {
         errors.general = "Wrong username or password";
         throw new UserInputError("Wrong username or  password", { errors });
       }
+
       newPassword = await bcrypt.hash(newPassword, 12);
-      const updateUser = User.updateOne(
-        { username: user.username },
-        { $set: { password: newPassword } },
-      );
-      // newPassword = password;
-      // const newUser = new User({
-      //   username,
-      //   password,
-      //   createdAt: new Date().toISOString(),
-      // });
-      const res = await updateUser.save();
+      user.password = newPassword;
+
+      const res = await user.save();
       const token = generateToken(user);
 
       return {
@@ -61,11 +53,6 @@ module.exports = {
         id: res._id,
         token,
       };
-      // return {
-      //   ...user._doc,
-      //   id: user._id,
-      //   token,
-      // };
     },
     /// ----------------------------------> deleteUser <-------------------------------------------- ///
     async deleteUser(_, { username, password }) {
@@ -81,9 +68,16 @@ module.exports = {
       }
 
       const match = await bcrypt.compare(password, user.password);
-      if (match) {
-        await user.delete();
+
+      if (!match) {
+        errors.general = "Wrong username or password";
+        throw new UserInputError("Wrong username or  password", { errors });
       }
+      await user.delete();
+      return {
+        ...user._doc,
+        id: user._id,
+      };
     },
     /// ----------------------------------> LOGIN <-------------------------------------------- ///
     async login(_, { username, password }) {
@@ -115,7 +109,7 @@ module.exports = {
         token,
       };
     },
-    /// -----------------------------> Register <------------------------------ ///
+    // -----------------------------> Register <------------------------------ ///
     async register(
       _,
       { registerInput: { username, email, password, confirmPassword } },
