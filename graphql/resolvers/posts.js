@@ -6,9 +6,9 @@ module.exports = {
   Mutation: {
     async createPost(_, { body, title }, context) {
       const user = checkAuth(context);
-      if (body.trim() === "") {
-        throw new Error("Post body must not be empty");
-      }
+      // if (body.trim() === "") {
+      //   throw new Error("Post body must not be empty");
+      // }
       if (title.trim() === "") {
         throw new Error("Post title must not be empty");
       }

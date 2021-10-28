@@ -43,25 +43,28 @@ module.exports = {
         throw new UserInputError("Wrong username or  password", { errors });
       }
       newPassword = await bcrypt.hash(newPassword, 12);
+      const updateUser = User.updateOne({
+        password: newPassword,
+      });
       // newPassword = password;
       // const newUser = new User({
       //   username,
       //   password,
       //   createdAt: new Date().toISOString(),
       // });
-      // const res = await newUser.save();
+      const res = await updateUser.save();
       const token = generateToken(user);
 
-      // return {
-      //   ...res._doc,
-      //   id: res._id,
-      //   token,
-      // };
       return {
-        ...user._doc,
-        id: user._id,
+        ...res._doc,
+        id: res._id,
         token,
       };
+      // return {
+      //   ...user._doc,
+      //   id: user._id,
+      //   token,
+      // };
     },
     /// ----------------------------------> deleteUser <-------------------------------------------- ///
     async deleteUser(_, { username, password }) {
