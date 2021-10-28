@@ -36,6 +36,7 @@ module.exports = gql`
     password: String!
     confirmPassword: String!
     email: String!
+    AboutUser: String!
   }
   type Query {
     getPosts: [Post]
@@ -50,6 +51,7 @@ module.exports = gql`
     createComment(postId: String!, body: String!): Post!
     deleteComment(postId: ID!, commentId: ID!): Post!
     likePost(postId: ID!): Post!
+    editPost(postId: ID!, newTitle: String!, body: String!): Post
     editpassword(
       username: String!
       password: String!
