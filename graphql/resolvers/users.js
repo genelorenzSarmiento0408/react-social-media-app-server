@@ -43,9 +43,10 @@ module.exports = {
         throw new UserInputError("Wrong username or  password", { errors });
       }
       newPassword = await bcrypt.hash(newPassword, 12);
-      const updateUser = User.updateOne({
-        password: newPassword,
-      });
+      const updateUser = User.updateOne(
+        { username: user.username },
+        { $set: { password: newPassword } },
+      );
       // newPassword = password;
       // const newUser = new User({
       //   username,
