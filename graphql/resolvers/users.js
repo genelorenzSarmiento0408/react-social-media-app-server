@@ -115,6 +115,7 @@ module.exports = {
         token,
       };
     },
+    /// -----------------------------> Register <------------------------------ ///
     async register(
       _,
       { registerInput: { username, email, password, confirmPassword } },
@@ -135,6 +136,14 @@ module.exports = {
         throw new UserInputError("Username is taken", {
           errors: {
             username: "This username is taken",
+          },
+        });
+      }
+      const foundemail = await User.findOne({ email });
+      if (foundemail) {
+        throw new UserInputError("This email is already in use", {
+          errors: {
+            email: "This email is already in use",
           },
         });
       }
