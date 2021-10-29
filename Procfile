@@ -1,1 +1,1 @@
-web: NODE_ENV=development && npm start
+web: NODE_ENV=test && npm start
