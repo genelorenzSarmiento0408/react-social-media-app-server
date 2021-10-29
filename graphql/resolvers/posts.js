@@ -4,6 +4,7 @@ const checkAuth = require("../../util/check-auth");
 const { AuthenticationError } = require("apollo-server");
 module.exports = {
   Mutation: {
+    /// ------------------------------> createPost <------------------------ ///
     async createPost(_, { body, title }, context) {
       const user = checkAuth(context);
       if (body.trim() === "") {
@@ -25,6 +26,7 @@ module.exports = {
 
       return post;
     },
+    /// ------------------------------> deletePost <------------------------ ///
     async deletePost(_, { postId }, context) {
       const user = checkAuth(context);
 
@@ -33,6 +35,48 @@ module.exports = {
         if (user.username === post.username) {
           await post.delete();
           return "Post deleted successfully";
+        } else {
+          throw new AuthenticationError("Action not allowed");
+        }
+      } catch (err) {
+        throw new Error(err);
+      }
+    },
+    /// ------------------------------> editTtile <------------------------ ///
+    async editTitle(_, { postId, newTitle }, context) {
+      const user = checkAuth(context);
+
+      try {
+        const post = await Post.findById(postId);
+        if (user.username === post.username) {
+          editedAt = new Date().toISOString();
+          post.editedAt = editedAt;
+          post.edited = true;
+          post.title = newTitle;
+          const res = await post.save();
+          return {
+            ...res._doc,
+            id: res._id,
+          };
+        } else {
+          throw new AuthenticationError("Action not allowed");
+        }
+      } catch (err) {
+        throw new Error(err);
+      }
+    },
+    /// -----------------------------> editBody <-------------------- ///
+    async editBody(_, { postId, newBody }, context) {
+      const user = checkAuth(context);
+
+      try {
+        const post = await Post.findById(postId);
+        if (user.username === post.username) {
+          editedAt = new Date().toISOString();
+          post.editedAt = editedAt;
+          post.body = newBody;
+          post.edited = true;
+          await post.save();
         } else {
           throw new AuthenticationError("Action not allowed");
         }

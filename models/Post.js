@@ -18,6 +18,8 @@ const postSchema = new Schema({
       createdAt: String,
     },
   ],
+  edited: Boolean,
+  editedAt: String,
   user: {
     type: Schema.Types.ObjectId,
     ref: "users",
