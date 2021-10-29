@@ -28,7 +28,6 @@ module.exports = {
     async editBio(_, { username, password, newBio }) {
       const { errors, valid } = validateLoginInput(username, password);
       const user = await User.findOne({ username });
-      const match = await bcrypt.compare(password, user.password);
 
       if (!valid) {
         throw new UserInputError("Errors", { errors });
@@ -38,17 +37,25 @@ module.exports = {
         errors.general = "User not found";
         throw new UserInputError("User not found", { errors });
       }
+      const match = await bcrypt.compare(password, user.password);
       if (!match) {
         errors.general = "Wrong username or password";
         throw new UserInputError("Wrong username or  password", { errors });
       }
       user.Bio = newBio;
+
+      const res = await user.save();
+      const token = generateToken(user);
+      return {
+        ...res._doc,
+        id: res._id,
+        token,
+      };
     },
     /// ----------------------------------> editPassword <-------------------------------------------- ///
     async editpassword(_, { password, newPassword, username }) {
       const { errors, valid } = validateLoginInput(username, password);
       const user = await User.findOne({ username });
-      const match = await bcrypt.compare(password, user.password);
 
       if (!valid) {
         throw new UserInputError("Errors", { errors });
@@ -58,6 +65,7 @@ module.exports = {
         errors.general = "User not found";
         throw new UserInputError("User not found", { errors });
       }
+      const match = await bcrypt.compare(password, user.password);
       if (!match) {
         errors.general = "Wrong username or password";
         throw new UserInputError("Wrong username or  password", { errors });
