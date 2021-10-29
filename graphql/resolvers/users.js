@@ -2,6 +2,7 @@ const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const { UserInputError } = require("apollo-server");
 
+const checkAuth = require("../../util/check-auth");
 const {
   validateRegisterInput,
   validateLoginInput,
@@ -23,6 +24,26 @@ function generateToken(user) {
 
 module.exports = {
   Mutation: {
+    /// ----------------------------------> editBio <----------------------------------------------- ///
+    async editBio(_, { username, password, newBio }) {
+      const { errors, valid } = validateLoginInput(username, password);
+      const user = await User.findOne({ username });
+      const match = await bcrypt.compare(password, user.password);
+
+      if (!valid) {
+        throw new UserInputError("Errors", { errors });
+      }
+
+      if (!user) {
+        errors.general = "User not found";
+        throw new UserInputError("User not found", { errors });
+      }
+      if (!match) {
+        errors.general = "Wrong username or password";
+        throw new UserInputError("Wrong username or  password", { errors });
+      }
+      user.Bio = newBio;
+    },
     /// ----------------------------------> editPassword <-------------------------------------------- ///
     async editpassword(_, { password, newPassword, username }) {
       const { errors, valid } = validateLoginInput(username, password);
