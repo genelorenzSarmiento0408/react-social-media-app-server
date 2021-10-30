@@ -181,5 +181,9 @@ module.exports = {
       };
     },
   },
-  Query: {},
+  Query: {
+    async getUsers(_, { username, password }) {
+      console.log(username, password);
+    },
+  },
 };
