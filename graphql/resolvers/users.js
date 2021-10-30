@@ -182,7 +182,7 @@ module.exports = {
     },
   },
   Query: {
-    async getUsers() {
+    async getUser() {
       try {
         const users = await User.find();
         return users;
