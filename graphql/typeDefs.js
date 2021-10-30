@@ -46,7 +46,7 @@ module.exports = gql`
     getPost(postId: ID!): Post
   }
   type Mutation {
-    editBio(username: String!, newBio: String!, password: String!): User!
+    editBio(username: String!, newBio: String!): User!
     createComment(postId: String!, body: String!): Post!
     createPost(body: String!, title: String!): Post!
     deleteComment(postId: ID!, commentId: ID!): Post!

@@ -25,23 +25,14 @@ function generateToken(user) {
 module.exports = {
   Mutation: {
     /// ----------------------------------> editBio <----------------------------------------------- ///
-    async editBio(_, { username, password, newBio }) {
-      const { errors, valid } = validateLoginInput(username, password);
+    async editBio(_, { username, newBio }) {
       const user = await User.findOne({ username });
-
-      if (!valid) {
-        throw new UserInputError("Errors", { errors });
-      }
 
       if (!user) {
         errors.general = "User not found";
         throw new UserInputError("User not found", { errors });
       }
-      const match = await bcrypt.compare(password, user.password);
-      if (!match) {
-        errors.general = "Wrong username or password";
-        throw new UserInputError("Wrong username or  password", { errors });
-      }
+
       user.Bio = newBio;
 
       const res = await user.save();
