@@ -7,10 +7,6 @@ const userSchema = new Schema({
   createdAt: String,
   bio: String,
   role: String,
-  post: {
-    type: Schema.Types.ObjectId,
-    ref: "posts",
-  },
 });
 
 module.exports = model("User", userSchema);
