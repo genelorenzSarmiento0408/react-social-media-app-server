@@ -182,7 +182,7 @@ module.exports = {
     },
   },
   Query: {
-    async getUsers() {
+    async sd() {
       try {
         const users = await User.find().sort({ createdAt: -1 });
         return users;
