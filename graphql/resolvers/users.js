@@ -36,11 +36,10 @@ module.exports = {
       user.Bio = newBio;
 
       const res = await user.save();
-      const token = generateToken(user);
+
       return {
         ...res._doc,
         id: res._id,
-        token,
       };
     },
     /// ----------------------------------> editPassword <-------------------------------------------- ///
