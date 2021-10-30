@@ -5,7 +5,7 @@ const userSchema = new Schema({
   password: String,
   email: String,
   createdAt: String,
-  Bio: String,
+  bio: String,
   role: String,
   post: {
     type: Schema.Types.ObjectId,
