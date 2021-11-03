@@ -192,7 +192,7 @@ module.exports = {
     },
     async getUser(_, { id }) {
       try {
-        const user = await User.findById({ id });
+        const user = await User.findById(id);
         if (user) {
           return user;
         } else throw new Error("User not found");
