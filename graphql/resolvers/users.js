@@ -191,7 +191,7 @@ module.exports = {
       }
     },
     async getUser(_, { id }) {
-      const user = await User.findbyId({ id });
+      const user = await User.findById({ id });
     },
   },
 };
