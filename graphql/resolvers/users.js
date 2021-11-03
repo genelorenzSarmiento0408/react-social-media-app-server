@@ -195,7 +195,7 @@ module.exports = {
         const user = await User.findById({ id });
         if (user) {
           return user;
-        } else throw new UserInputError("");
+        } else throw new Error("User not found");
       } catch (error) {
         throw new Error(error);
       }
