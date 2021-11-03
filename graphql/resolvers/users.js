@@ -190,5 +190,8 @@ module.exports = {
         throw new Error(err);
       }
     },
+    async getUser(_, { id }) {
+      const user = await User.findbyId({ id });
+    },
   },
 };
