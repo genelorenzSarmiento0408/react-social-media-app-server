@@ -190,9 +190,9 @@ module.exports = {
         throw new Error(err);
       }
     },
-    async getUser(_, { id }) {
+    async getUser(_, { username }) {
       try {
-        const user = await User.findOne(id);
+        const user = await User.findOne(username);
         if (user) {
           return user;
         } else throw new Error("User not found");
