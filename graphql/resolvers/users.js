@@ -2,6 +2,7 @@ const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const { UserInputError } = require("apollo-server");
 
+const checkAuth = require("../../util/check-auth");
 const {
   validateRegisterInput,
   validateLoginInput,
@@ -23,11 +24,28 @@ function generateToken(user) {
 
 module.exports = {
   Mutation: {
+    /// ----------------------------------> editBio <----------------------------------------------- ///
+    async editBio(_, { username, newBio }) {
+      const user = await User.findOne({ username });
+
+      if (!user) {
+        errors.general = "User not found";
+        throw new UserInputError("User not found", { errors });
+      }
+
+      user.Bio = newBio;
+
+      const res = await user.save();
+
+      return {
+        ...res._doc,
+        id: res._id,
+      };
+    },
     /// ----------------------------------> editPassword <-------------------------------------------- ///
     async editpassword(_, { password, newPassword, username }) {
       const { errors, valid } = validateLoginInput(username, password);
       const user = await User.findOne({ username });
-      const match = await bcrypt.compare(password, user.password);
 
       if (!valid) {
         throw new UserInputError("Errors", { errors });
@@ -37,6 +55,7 @@ module.exports = {
         errors.general = "User not found";
         throw new UserInputError("User not found", { errors });
       }
+      const match = await bcrypt.compare(password, user.password);
       if (!match) {
         errors.general = "Wrong username or password";
         throw new UserInputError("Wrong username or  password", { errors });
@@ -160,6 +179,26 @@ module.exports = {
         id: res._id,
         token,
       };
+    },
+  },
+  Query: {
+    async getUsers() {
+      try {
+        const users = await User.find().sort({ createdAt: -1 });
+        return users;
+      } catch (err) {
+        throw new Error(err);
+      }
+    },
+    async getUser(_, { username }) {
+      try {
+        const user = await User.findOne({ username });
+        if (user) {
+          return user;
+        } else throw new Error("User not found");
+      } catch (error) {
+        throw new Error(error);
+      }
     },
   },
 };
