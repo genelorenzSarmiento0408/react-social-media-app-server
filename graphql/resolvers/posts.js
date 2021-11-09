@@ -77,7 +77,11 @@ module.exports = {
           post.editedAt = editedAt;
           post.body = newBody;
           post.edited = true;
-          await post.save();
+          const res = await post.save();
+          return {
+            ...res._doc,
+            id: res._id,
+          };
         } else {
           throw new AuthenticationError("Action not allowed");
         }
