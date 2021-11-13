@@ -47,4 +47,7 @@ module.exports.validatePost = (title, body) => {
   if (body.trim() === "") {
     errors.body = "Body must not be empty";
   }
+  if (title.trim() === "") {
+    errors.title = "Title must not be empty";
+  }
 };
