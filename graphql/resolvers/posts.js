@@ -2,7 +2,7 @@ const Post = require("../../models/Post");
 const checkAuth = require("../../util/check-auth");
 const { validatePostInput } = require("../../util/validators");
 
-const { AuthenticationError } = require("apollo-server");
+const { AuthenticationError, UserInputError } = require("apollo-server");
 
 module.exports = {
   Mutation: {
@@ -11,7 +11,7 @@ module.exports = {
       const { errors, valid } = validatePostInput(body, title);
       const user = checkAuth(context);
 
-      if (!valid) console.log(user);
+      if (!valid) throw new UserInputError("Errors", { errors });
       const newPost = new Post({
         body,
         title,
