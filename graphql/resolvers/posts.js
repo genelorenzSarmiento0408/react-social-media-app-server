@@ -1,6 +1,6 @@
 const Post = require("../../models/Post");
 const checkAuth = require("../../util/check-auth");
-
+const { validatePostInput } = require("../../util/validators");
 const { AuthenticationError } = require("apollo-server");
 module.exports = {
   Mutation: {
