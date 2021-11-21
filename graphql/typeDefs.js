@@ -34,7 +34,11 @@ module.exports = gql`
     Bio: String
     role: String
   }
-
+  type Message {
+    id: ID!
+    username: String!
+    content: String!
+  }
   input RegisterInput {
     username: String!
     password: String!
@@ -43,6 +47,7 @@ module.exports = gql`
     AboutUser: String
   }
   type Query {
+    messages: [Message!]
     getPosts: [Post]!
     getPost(postId: ID!): Post
     getUsers: [User]!
