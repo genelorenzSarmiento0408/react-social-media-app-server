@@ -70,7 +70,7 @@ module.exports = gql`
     editTitle(postId: ID!, newTitle: String!): Post!
     likePost(postId: ID!): Post!
     login(username: String!, password: String!): User!
-    postMessage(username: String!, content: String!, createdAt: String!): ID!
+    postMessage(username: String!, content: String!): ID!
     register(registerInput: RegisterInput): User!
   }
 `;
