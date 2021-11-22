@@ -13,6 +13,7 @@ module.exports = {
         content,
         createdAt: new Date().toISOString(),
       });
+
       const newMessage = new Message({
         id,
         username,
