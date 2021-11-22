@@ -11,6 +11,7 @@ module.exports = {
   Query: {
     ...postsResolvers.Query,
     ...usersResolvers.Query,
+    ...messagesResolvers.Query,
   },
   Mutation: {
     ...usersResolvers.Mutation,
