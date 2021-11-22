@@ -35,6 +35,7 @@ module.exports = gql`
     role: String
   }
   type Message {
+    id: ID!
     content: String!
     createdAt: String!
     from: String!
@@ -62,7 +63,7 @@ module.exports = gql`
     deleteUser(username: String!, password: String!): User!
     editBio(username: String!, newBio: String!): User!
     editBody(postId: ID!, newBody: String!): Post!
-    editEmail(username: String!, email: String!): User!
+    editEmail(username: String!, newEmail: String!): User!
     editpassword(
       username: String!
       password: String!
@@ -71,7 +72,7 @@ module.exports = gql`
     editTitle(postId: ID!, newTitle: String!): Post!
     likePost(postId: ID!): Post!
     login(username: String!, password: String!): User!
-    sendMessage(to: String!, content: String!): ID!
     register(registerInput: RegisterInput): User!
+    sendMessage(to: String!, content: String!): Message!
   }
 `;

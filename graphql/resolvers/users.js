@@ -41,6 +41,25 @@ module.exports = {
         id: res._id,
       };
     },
+    /// ----------------------------------> editEmail <----------------------------------------------- ///
+    async editEmail(_, { username, newEmail }) {
+      const { errors } = "";
+      const user = await User.findOne({ username });
+
+      if (!user) {
+        errors.general = "User not found";
+        throw new UserInputError("User not found", { errors });
+      }
+
+      user.email = newEmail;
+
+      const res = await user.save();
+
+      return {
+        ...res._doc,
+        id: res._id,
+      };
+    },
     /// ----------------------------------> editPassword <-------------------------------------------- ///
     async editpassword(_, { password, newPassword, username }) {
       const { errors, valid } = validateLoginInput(username, password);

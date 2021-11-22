@@ -12,7 +12,7 @@ module.exports = {
         const user = checkAuth(context);
         if (!user) throw new AuthenticationError("Unauthenticated");
 
-        const recipient = await User.findOne(to);
+        const recipient = await User.findOne({ username: to });
 
         if (!recipient) throw new UserInputError("User not found");
 
