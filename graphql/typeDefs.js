@@ -1,5 +1,5 @@
 const { gql } = require("apollo-server");
-
+const messages = [];
 module.exports = gql`
   type Post {
     id: ID!
