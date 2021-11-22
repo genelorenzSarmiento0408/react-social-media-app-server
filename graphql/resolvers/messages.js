@@ -2,13 +2,14 @@ const Message = require("../../models/Message");
 const messages = [];
 module.exports = {
   Query: {
-    async messages() {
-      try {
-        await Message.find().sort({ createdAt: -1 });
-      } catch (err) {
-        throw new Error(err);
-      }
-    },
+    // async messages() {
+    //   try {
+    //     await Message.find().sort({ createdAt: -1 });
+    //   } catch (err) {
+    //     throw new Error(err);
+    //   }
+    // },
+    messages: () => messages,
   },
   Mutation: {
     async PostMessage(parent, { username, content }) {
@@ -28,7 +29,7 @@ module.exports = {
 
       const message = await newMessage.save();
 
-      return message;
+      return id;
     },
     // postMessage: (parent, { username, content }) => {
     //   const id = messages.length;
