@@ -17,5 +17,6 @@ module.exports = {
     ...usersResolvers.Mutation,
     ...postsResolvers.Mutation,
     ...commentsResolvers.Mutation,
+    ...messagesResolvers.Mutation,
   },
 };
