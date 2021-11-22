@@ -25,7 +25,9 @@ module.exports = {
         content,
         createdAt: new Date().toISOString(),
       });
-      const Message = await Message.save();
+
+      const essage = await Message.save();
+
       return newMessage;
     },
     // postMessage: (parent, { username, content }) => {
