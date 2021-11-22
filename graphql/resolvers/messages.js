@@ -3,7 +3,7 @@ const messages = [];
 module.exports = {
   Query: {
     async messages() {
-      messages;
+      await messages;
     },
   },
   Mutation: {
