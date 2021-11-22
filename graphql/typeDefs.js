@@ -62,6 +62,7 @@ module.exports = gql`
     deleteUser(username: String!, password: String!): User!
     editBio(username: String!, newBio: String!): User!
     editBody(postId: ID!, newBody: String!): Post!
+    editEmail(username: String!, email: String!): User!
     editpassword(
       username: String!
       password: String!
