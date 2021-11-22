@@ -3,8 +3,10 @@ const messages = [];
 module.exports = {
   Query: {
     async messages() {
-     try{ 
-       await Message.find().sort({ createdAt: -1 });
+      try {
+        await Message.find().sort({ createdAt: -1 });
+      } catch (err) {
+        throw new Error(err);
       }
     },
   },
