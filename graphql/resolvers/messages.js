@@ -19,7 +19,8 @@ module.exports = {
         content,
         createdAt: new Date().toISOString(),
       });
-      return id;
+      const Message = await Message.save();
+      return newMessage;
     },
     // postMessage: (parent, { username, content }) => {
     //   const id = messages.length;
