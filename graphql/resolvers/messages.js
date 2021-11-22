@@ -3,7 +3,7 @@ const messages = [];
 module.exports = {
   Query: {
     async messages() {
-      await messages;
+     try{ await Message.find().sort({ createdAt: -1 });}
     },
   },
   Mutation: {
