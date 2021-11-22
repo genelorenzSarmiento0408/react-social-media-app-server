@@ -1,5 +1,5 @@
 const { gql } = require("apollo-server");
-const messages = [];
+
 module.exports = gql`
   type Post {
     id: ID!
@@ -38,6 +38,7 @@ module.exports = gql`
     id: ID!
     username: String!
     content: String!
+    createdAt: String!
   }
   input RegisterInput {
     username: String!
@@ -69,6 +70,7 @@ module.exports = gql`
     editTitle(postId: ID!, newTitle: String!): Post!
     likePost(postId: ID!): Post!
     login(username: String!, password: String!): User!
+    postMessage(username: String!, content: String!, createdAt: String!): ID!
     register(registerInput: RegisterInput): User!
   }
 `;
