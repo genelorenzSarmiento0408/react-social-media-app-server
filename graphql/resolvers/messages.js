@@ -2,7 +2,9 @@ const Message = require("../../models/Message");
 const messages = [];
 module.exports = {
   Query: {
-    messages: () => messages,
+    async messages() {
+      messages;
+    },
   },
   Mutation: {
     async PostMessage(parent, { username, content }) {
