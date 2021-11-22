@@ -12,7 +12,7 @@ module.exports = {
     messages: () => messages,
   },
   Mutation: {
-    async PostMessage(parent, { username, content }) {
+    async postMessage(parent, { username, content }) {
       const id = messages.length;
       messages.push({
         id,
