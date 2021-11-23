@@ -6,6 +6,7 @@ const {
   validateRegisterInput,
   validateLoginInput,
 } = require("../../util/validators");
+const Post = require("../../models/Post");
 const { SECRET_KEY } = require("../../config");
 const User = require("../../models/User");
 
@@ -23,6 +24,44 @@ function generateToken(user) {
 
 module.exports = {
   Mutation: {
+    /// ----------------------------------> deleteUser <-------------------------------------------- ///
+    async deleteUser(_, { username, password }) {
+      const { errors, valid } = validateLoginInput(username, password);
+      const user = await User.findOne({ username });
+
+      try {
+        if (!valid) {
+          throw new UserInputError("Errors", { errors });
+        }
+        if (!user) {
+          errors.general = "User not found";
+          throw new UserInputError("User not found", { errors });
+        }
+
+        const match = await bcrypt.compare(password, user.password);
+
+        if (!match) {
+          errors.general = "Wrong username or password";
+          throw new UserInputError("Wrong username or  password", { errors });
+        }
+
+        const post = await Post.findOne({ username });
+        if (post) {
+          console.log("find posts, deleting \n");
+          await new Promise((resolve) => setTimeout(resolve, 5000));
+          await post.delete({ username: username });
+          console.log("deleted");
+        }
+        await user.delete();
+        return {
+          ...user._doc,
+          id: user._id,
+          token,
+        };
+      } catch (err) {
+        throw new Error(err);
+      }
+    },
     /// ----------------------------------> editBio <----------------------------------------------- ///
     async editBio(_, { username, newBio }) {
       const user = await User.findOne({ username });
@@ -91,31 +130,7 @@ module.exports = {
         token,
       };
     },
-    /// ----------------------------------> deleteUser <-------------------------------------------- ///
-    async deleteUser(_, { username, password }) {
-      const { errors, valid } = validateLoginInput(username, password);
-      const user = await User.findOne({ username });
 
-      if (!valid) {
-        throw new UserInputError("Errors", { errors });
-      }
-      if (!user) {
-        errors.general = "User not found";
-        throw new UserInputError("User not found", { errors });
-      }
-
-      const match = await bcrypt.compare(password, user.password);
-
-      if (!match) {
-        errors.general = "Wrong username or password";
-        throw new UserInputError("Wrong username or  password", { errors });
-      }
-      await user.delete();
-      return {
-        ...user._doc,
-        id: user._id,
-      };
-    },
     /// ----------------------------------> LOGIN <-------------------------------------------- ///
     async login(_, { username, password }) {
       const { errors, valid } = validateLoginInput(username, password);
