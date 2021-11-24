@@ -4,7 +4,27 @@ const checkAuth = require("../../util/check-auth");
 const User = require("../../models/User");
 
 module.exports = {
-  Query: {},
+  Query: {
+    async getMessages(parent, { from }, context) {
+      try {
+        const user = checkAuth(context);
+        if (!user) throw new AuthenticationError("Unauthenticated");
+
+        const otherUser = await User.findOne({ username: from });
+        if (!otherUser) throw new UserInputError("User not found");
+
+        const usernames = [user.username, otherUser.username];
+        const messages = await Message.find({
+          from: usernames,
+          to: usernames,
+        }).sort({ createdAt: -1 });
+
+        return messages;
+      } catch (err) {
+        throw err;
+      }
+    },
+  },
   Mutation: {
     /// ----------------------------------> sendMessage <-------------------------------------------- ///
     async sendMessage(parent, { to, content }, context) {
@@ -23,7 +43,7 @@ module.exports = {
         const message = await Message.create({
           content,
           createdAt: new Date().toISOString(),
-          createdAtReadable: new Date(),
+
           to,
           from: user.username,
         });

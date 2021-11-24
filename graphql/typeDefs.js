@@ -38,7 +38,6 @@ module.exports = gql`
     id: ID!
     content: String!
     createdAt: String!
-    createdAtReadable: String!
     from: String!
     to: String!
   }
@@ -50,11 +49,11 @@ module.exports = gql`
     AboutUser: String
   }
   type Query {
-    messages: [Message!]
     getPosts: [Post]
     getPost(postId: ID!): Post!
     getUsers: [User]!
     getUser(username: String!): User
+    getMessages(from: String!): [Message]!
   }
   type Mutation {
     createComment(postId: String!, body: String!): Post!
