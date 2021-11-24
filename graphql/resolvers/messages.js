@@ -23,6 +23,7 @@ module.exports = {
         const message = await Message.create({
           content,
           createdAt: new Date().toISOString(),
+          createdAtReadable: new Date(),
           to,
           from: user.username,
         });

@@ -6,7 +6,10 @@ const userSchema = new Schema({
   email: String,
   createdAt: String,
   Bio: String,
-  role: String,
+  role: {
+    type: String,
+    enum: ["student", "user", "teacher", "admin"],
+  },
 });
 
 module.exports = model("User", userSchema);

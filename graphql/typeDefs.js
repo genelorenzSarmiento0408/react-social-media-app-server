@@ -38,6 +38,7 @@ module.exports = gql`
     id: ID!
     content: String!
     createdAt: String!
+    createdAtReadable: String!
     from: String!
     to: String!
   }
