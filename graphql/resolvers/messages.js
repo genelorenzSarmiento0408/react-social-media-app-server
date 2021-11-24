@@ -15,7 +15,9 @@ module.exports = {
         const recipient = await User.findOne({ username: to });
 
         if (!recipient) throw new UserInputError("User not found");
-
+        else if (recipient.username === user.username) {
+          throw new UserInputError("You cant message yourself");
+        }
         if (content.trim() === "") throw new UserInputError("Message is Empty");
 
         const message = await Message.create({

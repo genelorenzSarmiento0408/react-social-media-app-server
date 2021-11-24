@@ -53,11 +53,7 @@ module.exports = {
           console.log("deleted");
         }
         await user.delete();
-        return {
-          ...user._doc,
-          id: user._id,
-          token,
-        };
+        return "User Deleted";
       } catch (err) {
         throw new Error(err);
       }

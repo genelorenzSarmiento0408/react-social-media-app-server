@@ -50,8 +50,8 @@ module.exports = gql`
   }
   type Query {
     messages: [Message!]
-    getPosts: [Post]!
-    getPost(postId: ID!): Post
+    getPosts: [Post]
+    getPost(postId: ID!): Post!
     getUsers: [User]!
     getUser(username: String!): User
   }
@@ -60,7 +60,7 @@ module.exports = gql`
     createPost(body: String!, title: String!): Post!
     deleteComment(postId: ID!, commentId: ID!): Post!
     deletePost(postId: ID!): String!
-    deleteUser(username: String!, password: String!): User!
+    deleteUser(username: String!, password: String!): String!
     editBio(username: String!, newBio: String!): User!
     editBody(postId: ID!, newBody: String!): Post!
     editEmail(username: String!, newEmail: String!): User!
