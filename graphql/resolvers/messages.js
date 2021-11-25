@@ -43,7 +43,6 @@ module.exports = {
         const message = await Message.create({
           content,
           createdAt: new Date().toISOString(),
-
           to,
           from: user.username,
         });

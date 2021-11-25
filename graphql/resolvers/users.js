@@ -1,7 +1,7 @@
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
-const { UserInputError } = require("apollo-server");
-
+const { UserInputError, AuthenticationError } = require("apollo-server");
+const checkAuth = require("../../util/check-auth");
 const {
   validateRegisterInput,
   validateLoginInput,
@@ -51,7 +51,7 @@ module.exports = {
         if (post) {
           console.log("find posts, deleting \n");
           await new Promise((resolve) => setTimeout(resolve, 5000));
-          await post.delete({ username: username });
+          await post.deleteMany({ username: username });
           console.log("deleted");
         }
         await user.delete();
@@ -213,9 +213,10 @@ module.exports = {
     },
   },
   Query: {
-    async getUsers() {
+    async getUsers(_, { username }) {
       try {
-        const users = await User.find().sort({ createdAt: -1 });
+        const users = await User.find({ username: { $ne: username } });
+
         return users;
       } catch (err) {
         throw new Error(err);

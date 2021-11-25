@@ -6,6 +6,7 @@ const userSchema = new Schema({
   email: String,
   createdAt: String,
   Bio: String,
+  isBlocked: Boolean,
   role: {
     type: String,
     enum: ["student", "user", "teacher", "admin"],

@@ -43,6 +43,7 @@ module.exports = gql`
     token: String
     username: String!
     createdAt: String!
+    isBlocked: String
     Bio: String
     role: String
   }
@@ -62,9 +63,10 @@ module.exports = gql`
   }
 
   type Query {
-    getPosts: [Post]
+    findPosts(from: String!): [Post]!
+    getPosts: [Post]!
     getPost(postId: ID!): Post!
-    getUsers: [User]!
+    getUsers(username: String!): [User]!
     getUser(username: String!): User
     getMessages(from: String!): [Message]!
   }

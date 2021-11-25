@@ -1,4 +1,5 @@
 const Post = require("../../models/Post");
+const User = require("../../models/User");
 const checkAuth = require("../../util/check-auth");
 const { validatePostInput } = require("../../util/validators");
 
@@ -89,6 +90,24 @@ module.exports = {
     },
   },
   Query: {
+    async findPosts(_, { from }) {
+      try {
+        const user = await User.findOne({ username: from });
+        if (!user) {
+          errors.general = "User not found";
+          throw new UserInputError("User not found", { errors });
+        }
+
+        const posts = await Post.find({ username: from }).exec();
+        // if (posts) {
+        return posts;
+        // } else {
+        //   throw new Error("Post not found");
+        // }
+      } catch (err) {
+        throw new Error(err);
+      }
+    },
     async getPosts() {
       try {
         const posts = await Post.find().sort({ createdAt: -1 });

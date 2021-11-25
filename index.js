@@ -14,13 +14,12 @@ const { MONGODB } = require("./config");
 
 const PORT = process.env.PORT || 5000;
 
+const server = new ApolloServer({
+  typeDefs,
+  resolvers,
+  context: ({ req }) => ({ req }),
+});
 async function startServer() {
-  const server = new ApolloServer({
-    typeDefs,
-    resolvers,
-    context: ({ req }) => ({ req }),
-  });
-
   await server.start();
 
   const app = express();
