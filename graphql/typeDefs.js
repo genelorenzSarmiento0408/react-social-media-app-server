@@ -1,6 +1,18 @@
-const { gql } = require("apollo-server");
+const { gql } = require("apollo-server-express");
+const {
+  GraphQLUpload,
+  graphqlUploadExpress, // A Koa implementation is also exported.
+} = require("graphql-upload");
 
 module.exports = gql`
+  # The implementation for this scalar is provided by the
+  # 'GraphQLUpload' export from the 'graphql-upload' package
+  # in the resolver map below.
+  scalar Upload
+
+  type File {
+    url: String
+  }
   type Post {
     id: ID!
     body: String!
@@ -48,6 +60,7 @@ module.exports = gql`
     email: String!
     AboutUser: String
   }
+
   type Query {
     getPosts: [Post]
     getPost(postId: ID!): Post!
@@ -74,5 +87,7 @@ module.exports = gql`
     login(username: String!, password: String!): User!
     register(registerInput: RegisterInput): User!
     sendMessage(to: String!, content: String!): Message!
+    # Multiple uploads are supported. See graphql-upload docs for details.
+    uploadFile(file: Upload!): File!
   }
 `;
