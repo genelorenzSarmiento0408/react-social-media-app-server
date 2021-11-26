@@ -32,7 +32,7 @@ module.exports = {
         });
 
         return {
-          url: `http://localhost:5000/images/${randomName}`,
+          url: `http://localhost:5000/static/images/${randomName}`,
         };
       } catch (err) {
         throw new Error(err);

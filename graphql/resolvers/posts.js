@@ -99,11 +99,7 @@ module.exports = {
         }
 
         const posts = await Post.find({ username: from }).exec();
-        // if (posts) {
         return posts;
-        // } else {
-        //   throw new Error("Post not found");
-        // }
       } catch (err) {
         throw new Error(err);
       }

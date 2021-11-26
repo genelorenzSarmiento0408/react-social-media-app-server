@@ -37,13 +37,21 @@ module.exports = gql`
     createdAt: String!
     username: String!
   }
+  type BlockUser {
+    id: ID!
+    blockedby: String!
+    blocked: String!
+    blockedAt: String!
+  }
   type User {
     id: ID!
     email: String!
     token: String
     username: String!
     createdAt: String!
-    isBlocked: String
+    isBlocked: Boolean
+    haveBlocks: Boolean
+    blocks: [BlockUser]!
     Bio: String
     role: String
   }
@@ -71,6 +79,7 @@ module.exports = gql`
     getMessages(from: String!): [Message]!
   }
   type Mutation {
+    blockUser(blocked: String!): User!
     createComment(postId: String!, body: String!): Post!
     createPost(body: String!, title: String!): Post!
     deleteComment(postId: ID!, commentId: ID!): Post!

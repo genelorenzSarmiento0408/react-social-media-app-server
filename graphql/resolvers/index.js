@@ -3,6 +3,7 @@ const usersResolvers = require("./users");
 const commentsResolvers = require("./comments");
 const messagesResolvers = require("./messages");
 const uploadResolvers = require("./upload");
+const blockResolvers = require("./blocks");
 
 module.exports = {
   Upload: {
@@ -24,5 +25,6 @@ module.exports = {
     ...commentsResolvers.Mutation,
     ...messagesResolvers.Mutation,
     ...uploadResolvers.Mutation,
+    ...blockResolvers.Mutation,
   },
 };

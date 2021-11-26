@@ -7,6 +7,14 @@ const userSchema = new Schema({
   createdAt: String,
   Bio: String,
   isBlocked: Boolean,
+  haveBlocks: Boolean,
+  blocks: [
+    {
+      blocked: String,
+      blockedby: String,
+      blockedAt: String,
+    },
+  ],
   role: {
     type: String,
     enum: ["student", "user", "teacher", "admin"],

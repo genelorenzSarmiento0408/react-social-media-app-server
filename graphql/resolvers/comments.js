@@ -9,7 +9,7 @@ module.exports = {
       if (body.trim() === "") {
         throw new UserInputError("Empty comment", {
           errors: {
-            body: "Comment must NOT be epty",
+            body: "Comment must NOT be empty",
           },
         });
       }
