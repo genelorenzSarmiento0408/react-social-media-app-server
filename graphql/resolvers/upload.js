@@ -1,5 +1,6 @@
 const path = require("path");
 const fs = require("fs");
+const Upload = require("../../models/Upload");
 const { GraphQLUpload } = require("graphql-upload");
 function generateRandomString(length) {
   var result = "";
@@ -30,9 +31,12 @@ module.exports = {
           const writeStream = fs.createWriteStream(pathName);
           stream.pipe(writeStream).on("finish", resolve).on("error", reject);
         });
-
-        return {
+        const upload = await new Upload({
           url: `http://localhost:5000/static/images/${randomName}`,
+        });
+        await upload.save();
+        return {
+          upload,
         };
       } catch (err) {
         throw new Error(err);
