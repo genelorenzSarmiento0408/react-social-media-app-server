@@ -9,6 +9,8 @@ const {
 const Post = require("../../models/Post");
 const { SECRET_KEY } = require("../../config");
 const User = require("../../models/User");
+const Message = require("../../models/Message");
+const { listeners } = require("../../models/Post");
 
 function generateToken(user) {
   return jwt.sign(
@@ -23,7 +25,7 @@ function generateToken(user) {
       blocks: user.blocks,
     },
     SECRET_KEY,
-    { expiresIn: "2d" },
+    { expiresIn: "2d" }
   );
 }
 
@@ -165,19 +167,19 @@ module.exports = {
     // -----------------------------> Register <------------------------------ ///
     async register(
       _,
-      { registerInput: { username, email, password, confirmPassword } },
+      { registerInput: { username, email, password, confirmPassword } }
     ) {
       // Validate user data
       const { valid, errors } = validateRegisterInput(
         username,
         email,
         password,
-        confirmPassword,
+        confirmPassword
       );
       if (!valid) {
         throw new UserInputError("Errors", { errors });
       }
-      // TODO: Make sure user doesnt already exist
+
       const user = await User.findOne({ username });
       if (user) {
         throw new UserInputError("Username is taken", {
@@ -216,12 +218,26 @@ module.exports = {
     },
   },
   Query: {
-    async getUsers(_, { username }) {
+    async getUsers(_, __, context) {
       try {
-        const users = await User.find({ username: { $ne: username } });
+        const user = checkAuth(context);
+        if (!user) throw new AuthenticationError("Unauthenticated");
+        let users = await User.find({ username: { $ne: user.username } });
 
+        const allUserMessages = await Message.find({
+          $or: [{ from: user.username }, { to: user.username }],
+        }).sort({ createdAt: -1 });
+
+        users = users.map((otherUser) => {
+          const latestMessage = allUserMessages.find(
+            (m) => m.from === otherUser.username || m.to === otherUser.username
+          );
+          otherUser.latestMessage = latestMessage;
+          return otherUser;
+        });
         return users;
       } catch (err) {
+        console.error(err);
         throw new Error(err);
       }
     },

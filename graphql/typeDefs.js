@@ -49,6 +49,7 @@ module.exports = gql`
     token: String
     username: String!
     createdAt: String!
+    latestMessage: Message
     isBlocked: Boolean
     haveBlocks: Boolean
     blocks: [BlockUser]!
@@ -74,7 +75,7 @@ module.exports = gql`
     findPosts(from: String!): [Post]!
     getPosts: [Post]!
     getPost(postId: ID!): Post!
-    getUsers(username: String!): [User]!
+    getUsers: [User]!
     getUser(username: String!): User
     getMessages(from: String!): [Message]!
   }
