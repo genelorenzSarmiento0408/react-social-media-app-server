@@ -8,8 +8,8 @@ const { AuthenticationError, UserInputError } = require("apollo-server");
 module.exports = {
   Mutation: {
     /// ------------------------------> createPost <------------------------ ///
-    async createPost(_, { body, title }, context) {
-      const { errors, valid } = validatePostInput(body, title);
+    async createPost(_, { title, body }, context) {
+      const { errors, valid } = validatePostInput(title, body);
       const user = checkAuth(context);
 
       if (!valid) throw new UserInputError("Errors", { errors });
@@ -20,6 +20,7 @@ module.exports = {
         username: user.username,
         createdAt: new Date().toISOString(),
         edited: false,
+        editedAt: null,
       });
 
       const post = await newPost.save();

@@ -1,7 +1,7 @@
 const path = require("path");
 const fs = require("fs");
 const Upload = require("../../models/Upload");
-const { GraphQLUpload } = require("graphql-upload");
+
 function generateRandomString(length) {
   var result = "";
   var characters =
@@ -13,10 +13,18 @@ function generateRandomString(length) {
   return result;
 }
 module.exports = {
-  Upload: GraphQLUpload,
-  Query: {},
+  Query: {
+    async getUploads(_) {
+      try {
+        const upload = await Upload.find();
+        return upload;
+      } catch (err) {
+        throw new Error(err);
+      }
+    },
+  },
   Mutation: {
-    uploadFile: async (parent, { file }) => {
+    uploadFile: async (_, { file }) => {
       try {
         const { createReadStream, filename } = await file;
 
