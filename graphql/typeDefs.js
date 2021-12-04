@@ -1,8 +1,4 @@
 const { gql } = require("apollo-server-express");
-const {
-  GraphQLUpload,
-  graphqlUploadExpress, // A Koa implementation is also exported.
-} = require("graphql-upload");
 
 module.exports = gql`
   # The implementation for this scalar is provided by the
@@ -89,14 +85,13 @@ module.exports = gql`
     deletePost(postId: ID!): String!
     deleteUser(username: String!, password: String!): String!
     editBio(username: String!, newBio: String!): User!
-    editBody(postId: ID!, newBody: String!): Post!
     editEmail(username: String!, newEmail: String!): User!
     editpassword(
       username: String!
       password: String!
       newPassword: String!
     ): User!
-    editTitle(postId: ID!, newTitle: String!): Post!
+    editPost(postId: ID!, newTitle: String, newBody: String): Post!
     likePost(postId: ID!): Post!
     login(username: String!, password: String!): User!
     register(registerInput: RegisterInput): User!

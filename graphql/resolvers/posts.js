@@ -43,40 +43,23 @@ module.exports = {
         throw new Error(err);
       }
     },
-    /// ------------------------------> editTtile <------------------------ ///
-    async editTitle(_, { postId, newTitle }, context) {
+    /// -----------------------------new edit posts implementation ---------- ///
+    async editPost(_, { postId, newTitle, newBody }, context) {
       const user = checkAuth(context);
-
       try {
         const post = await Post.findById(postId);
         if (user.username === post.username) {
           editedAt = new Date().toISOString();
-          post.editedAt = editedAt;
-          post.edited = true;
-          post.title = newTitle;
-          const res = await post.save();
-          return {
-            ...res._doc,
-            id: res._id,
-          };
-        } else {
-          throw new AuthenticationError("Action not allowed");
-        }
-      } catch (err) {
-        throw new Error(err);
-      }
-    },
-    /// -----------------------------> editBody <-------------------- ///
-    async editBody(_, { postId, newBody }, context) {
-      const user = checkAuth(context);
-
-      try {
-        const post = await Post.findById(postId);
-        if (user.username === post.username) {
-          editedAt = new Date().toISOString();
-          post.editedAt = editedAt;
-          post.body = newBody;
-          post.edited = true;
+          if (newTitle) {
+            post.editedAt = editedAt;
+            post.edited = true;
+            post.title = newTitle;
+          }
+          if (newBody) {
+            post.editedAt = editedAt;
+            post.edited = true;
+            post.body = newBody;
+          }
           const res = await post.save();
           return {
             ...res._doc,
