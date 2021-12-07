@@ -11,6 +11,7 @@ module.exports = {
     async createPost(_, { title, body }, context) {
       const { errors, valid } = validatePostInput(title, body);
       const user = checkAuth(context);
+      const findUser = await User.findOne({ username: user.username });
 
       if (!valid) throw new UserInputError("Errors", { errors });
       const newPost = new Post({
@@ -21,8 +22,8 @@ module.exports = {
         createdAt: new Date().toISOString(),
         edited: false,
         editedAt: null,
+        profileUrl: findUser.ProfileUrl,
       });
-
       const post = await newPost.save();
 
       return post;

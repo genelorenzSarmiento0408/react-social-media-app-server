@@ -1,12 +1,10 @@
 const { gql } = require("apollo-server-express");
 
 module.exports = gql`
-  # The implementation for this scalar is provided by the
-  # 'GraphQLUpload' export from the 'graphql-upload' package
-  # in the resolver map below.
   scalar Upload
 
   type File {
+    createdAt: String!
     url: String
   }
   type Post {
@@ -16,7 +14,7 @@ module.exports = gql`
     createdAt: String!
     username: String!
     comments: [Comment]!
-    file: [File]
+    profileUrl: String
     likes: [Like]!
     likeCount: Int!
     commentCount: Int!
@@ -45,6 +43,7 @@ module.exports = gql`
     email: String!
     token: String
     username: String!
+    ProfileUrl: String
     createdAt: String!
     latestMessage: Message
     isBlocked: Boolean
@@ -97,6 +96,6 @@ module.exports = gql`
     register(registerInput: RegisterInput): User!
     sendMessage(to: String!, content: String!): Message!
     # Multiple uploads are supported. See graphql-upload docs for details.
-    uploadFile(file: Upload!): File!
+    changeProfile(file: Upload!): User
   }
 `;

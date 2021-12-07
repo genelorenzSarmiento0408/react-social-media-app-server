@@ -19,6 +19,7 @@ const userSchema = new Schema({
     type: String,
     enum: ["student", "user", "teacher", "admin"],
   },
+  ProfileUrl: String,
 });
 
 module.exports = model("User", userSchema);

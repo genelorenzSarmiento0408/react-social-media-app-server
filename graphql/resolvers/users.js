@@ -1,3 +1,4 @@
+"use strict";
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const { UserInputError, AuthenticationError } = require("apollo-server");
@@ -10,7 +11,6 @@ const Post = require("../../models/Post");
 const { SECRET_KEY } = require("../../config");
 const User = require("../../models/User");
 const Message = require("../../models/Message");
-const { listeners } = require("../../models/Post");
 
 function generateToken(user) {
   return jwt.sign(
@@ -21,6 +21,7 @@ function generateToken(user) {
       role: user.role,
       Bio: user.Bio,
       isBlocked: user.isBlocked,
+      ProfileUrl: user.ProfileUrl,
       haveBlocks: user.haveBlocks,
       blocks: user.blocks,
     },
