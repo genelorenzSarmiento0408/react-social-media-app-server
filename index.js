@@ -1,30 +1,35 @@
 const { ApolloServer } = require("apollo-server-express");
-const {
-  GraphQLUpload,
-  graphqlUploadExpress, // A Koa implementation is also exported.
-} = require("graphql-upload");
+const { graphqlUploadExpress } = require("graphql-upload");
 const mongoose = require("mongoose");
 const express = require("express");
 const cors = require("cors");
 const path = require("path");
-
 const typeDefs = require("./graphql/typeDefs");
 const resolvers = require("./graphql/resolvers");
 const { MONGODB } = require("./config");
+const { createServer } = require("http");
+const { makeExecutableSchema } = require("@graphql-tools/schema");
 
 const PORT = process.env.PORT || 5000;
 
-const server = new ApolloServer({
-  typeDefs,
-  resolvers,
-  context: ({ req }) => ({ req }),
-});
-async function startServer() {
-  await server.start();
-
+(async function () {
   const app = express();
+  const httpServer = createServer(app);
+  const schema = makeExecutableSchema({
+    typeDefs,
+    resolvers,
+  });
 
+  const server = new ApolloServer({
+    typeDefs,
+    resolvers,
+    context: ({ req }) => ({ req }),
+    schema,
+  });
+
+  await server.start();
   // This middleware should be added before calling `applyMiddleware`.
+
   app.use(graphqlUploadExpress());
 
   server.applyMiddleware({ app });
@@ -36,17 +41,21 @@ async function startServer() {
     .then(() => {
       console.log("MongoDB Connected");
     })
-    .then((res) => {
-      console.log(`running on ${PORT}`);
+    .then(() => {
+      console.log(
+        `🚀 and running on http://localhost:${PORT}${server.graphqlPath}`
+      );
     })
     .catch((err) => {
       console.log(err);
     });
-  await new Promise((r) => app.listen({ port: PORT }, r));
 
   console.log(
-    `🚀 Server ready at http://localhost:${PORT}${server.graphqlPath}`,
+    `🚀 Server ready at http://localhost:${PORT}${server.graphqlPath}`
   );
-}
-
-startServer();
+  httpServer.listen(PORT, () => {
+    console.log(
+      `🚀 Query endpoint ready at http://localhost:${PORT}${server.graphqlPath}`
+    );
+  });
+})();
