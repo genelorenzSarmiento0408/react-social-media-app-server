@@ -59,6 +59,13 @@ module.exports = gql`
     from: String!
     to: String!
   }
+  type Reaction {
+    id: ID!
+    content: String!
+    createdAt: String!
+    Message: Message
+    User: User!
+  }
   input RegisterInput {
     username: String!
     password: String!
@@ -95,6 +102,7 @@ module.exports = gql`
     login(username: String!, password: String!): User!
     register(registerInput: RegisterInput): User!
     sendMessage(to: String!, content: String!): Message!
+    reactToMessage(id: ID!, content: String!): Reaction!
     # Multiple uploads are supported. See graphql-upload docs for details.
     changeProfile(file: Upload!): User
   }

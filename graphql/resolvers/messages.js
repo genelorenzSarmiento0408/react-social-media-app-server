@@ -1,7 +1,12 @@
 const Message = require("../../models/Message");
-const { AuthenticationError, UserInputError } = require("apollo-server");
+const {
+  AuthenticationError,
+  UserInputError,
+  ForbiddenError,
+} = require("apollo-server");
 const checkAuth = require("../../util/check-auth");
 const User = require("../../models/User");
+const Reaction = require("../../models/Reaction");
 
 module.exports = {
   Query: {
@@ -50,6 +55,43 @@ module.exports = {
         return message;
       } catch (err) {
         throw new Error(err);
+      }
+    },
+    async reactToMessage(_, { id, content }, context) {
+      let user = checkAuth(context);
+      const reactions = ["❤️", "😆", "😯", "😢", "😡", "👍", "👎"];
+      try {
+        if (!reactions.includes(content)) {
+          throw new UserInputError("Invalid Reaction");
+        }
+        const username = user ? user.username : "";
+        user = await User.findOne({ username });
+        if (!user) throw new AuthenticationError("Unauthenticated");
+
+        const message = await Message.findOne({ id });
+        if (!message) throw new UserInputError("Message not found");
+
+        if (message.from !== user.username && message.to !== user.username) {
+          throw new ForbiddenError("Unauthorized");
+        }
+        let reaction = await Reaction.findOne({
+          messageId: message.id,
+          username: user.username,
+        });
+        if (reaction) {
+          reaction.content = content;
+          await reaction.save();
+        } else {
+          reaction = await Reaction.create({
+            messageId: message.id,
+            username: user.username,
+            content,
+            createdAt: new Date().toISOString(),
+          });
+        }
+        return reaction;
+      } catch (error) {
+        throw error;
       }
     },
   },

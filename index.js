@@ -14,7 +14,6 @@ const PORT = process.env.PORT || 5000;
 
 (async function () {
   const app = express();
-  const httpServer = createServer(app);
   const schema = makeExecutableSchema({
     typeDefs,
     resolvers,
@@ -35,6 +34,7 @@ const PORT = process.env.PORT || 5000;
   server.applyMiddleware({ app });
   app.use("/static", express.static(path.join(__dirname, "public")));
   app.use(cors());
+  const httpServer = createServer(app);
 
   mongoose
     .connect(MONGODB, { useNewUrlParser: true, useUnifiedTopology: true })

@@ -5,12 +5,16 @@ const messagesResolvers = require("./messages");
 const uploadResolvers = require("./upload");
 const blockResolvers = require("./blocks");
 const { GraphQLUpload } = require("graphql-upload");
+const Message = require("../../models/Message");
 
 module.exports = {
   Upload: GraphQLUpload,
   Post: {
     likeCount: (parent) => parent.likes.length,
     commentCount: (parent) => parent.comments.length,
+  },
+  Reaction: {
+    Message: async (parent) => await Message.findById(parent.messageId),
   },
   Query: {
     ...postsResolvers.Query,
