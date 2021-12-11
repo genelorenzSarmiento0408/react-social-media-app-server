@@ -68,7 +68,7 @@ module.exports = {
         user = await User.findOne({ username });
         if (!user) throw new AuthenticationError("Unauthenticated");
 
-        const message = await Message.findOne({ id });
+        const message = await Message.findById(id);
         if (!message) throw new UserInputError("Message not found");
 
         if (message.from !== user.username && message.to !== user.username) {
@@ -76,20 +76,52 @@ module.exports = {
         }
         let reaction = await Reaction.findOne({
           messageId: message.id,
-          username: user.username,
+          reactedBy: user.username,
         });
+
         if (reaction) {
-          reaction.content = content;
-          await reaction.save();
-        } else {
-          reaction = await Reaction.create({
+          message.reactions.shift();
+
+          await message.reactions.unshift({
             messageId: message.id,
             username: user.username,
             content,
             createdAt: new Date().toISOString(),
           });
+          await message.save();
+          reaction.content = content;
+          await reaction.save();
+        } else {
+          await message.reactions.unshift({
+            messageId: message.id,
+            content,
+            createdAt: new Date().toISOString(),
+          });
+          await message.save();
+          reaction = await Reaction.create({
+            messageId: message.id,
+
+            content,
+            createdAt: new Date().toISOString(),
+            reactedBy: user.username,
+          });
         }
         return reaction;
+      } catch (error) {
+        throw error;
+      }
+    },
+    async deleteMessage(_, { messageId }, context) {
+      const user = checkAuth(context);
+      if (!user) throw new AuthenticationError("Unauthenticated");
+      try {
+        const message = await Message.findById(messageId);
+        if (!message) throw new UserInputError("Can't find the message");
+        if (user.username !== message.from) {
+          throw new ForbiddenError("Action not allowed");
+        }
+        await message.delete();
+        return "Message deleted successfully";
       } catch (error) {
         throw error;
       }

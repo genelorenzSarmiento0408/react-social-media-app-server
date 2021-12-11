@@ -58,13 +58,14 @@ module.exports = gql`
     createdAt: String!
     from: String!
     to: String!
+    reactions: [Reaction]
   }
   type Reaction {
-    id: ID!
+    id: String!
     content: String!
     createdAt: String!
-    Message: Message
-    User: User!
+    reactedBy: String!
+    message: Message
   }
   input RegisterInput {
     username: String!
@@ -85,11 +86,13 @@ module.exports = gql`
   }
   type Mutation {
     blockUser(blocked: String!): User!
+    changeProfile(file: Upload!): User
     createComment(postId: String!, body: String!): Post!
     createPost(body: String!, title: String!): Post!
     deleteComment(postId: ID!, commentId: ID!): Post!
     deletePost(postId: ID!): String!
     deleteUser(username: String!, password: String!): String!
+    deleteMessage(messageId: String!): String!
     editBio(username: String!, newBio: String!): User!
     editEmail(username: String!, newEmail: String!): User!
     editpassword(
@@ -102,8 +105,7 @@ module.exports = gql`
     login(username: String!, password: String!): User!
     register(registerInput: RegisterInput): User!
     sendMessage(to: String!, content: String!): Message!
-    reactToMessage(id: ID!, content: String!): Reaction!
-    # Multiple uploads are supported. See graphql-upload docs for details.
-    changeProfile(file: Upload!): User
+    sendMessageUpload(file: Upload!, to: String!): Message
+    reactToMessage(id: String!, content: String!): Reaction!
   }
 `;

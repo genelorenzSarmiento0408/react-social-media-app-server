@@ -14,7 +14,7 @@ module.exports = {
     commentCount: (parent) => parent.comments.length,
   },
   Reaction: {
-    Message: async (parent) => await Message.findById(parent.messageId),
+    message: async (parent) => await Message.findById(parent.messageId),
   },
   Query: {
     ...postsResolvers.Query,

@@ -5,6 +5,9 @@ const messageSchema = new Schema({
   createdAt: String,
   from: String,
   to: String,
+  reactions: [
+    { content: String, createdAt: String, messageId: String, username: String },
+  ],
 });
 
 module.exports = model("Message", messageSchema);
