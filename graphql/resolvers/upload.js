@@ -56,8 +56,7 @@ module.exports = {
           let oldURL = findUpload.url;
           userObj.ProfileUrl = `http://lorenzsocmedserverapi.herokuapp.com/static/images/${randomName}`;
           await userObj.save();
-
-          fs.unlink(`./public/${oldURL.slice(28)}`, () => {
+          fs.unlink(`./public/${oldURL.slice(49)}`, () => {
             console.log("The deletion was succesful");
           });
 
@@ -100,7 +99,7 @@ module.exports = {
         const { createReadStream, filename } = await file;
         const { ext } = path.parse(filename);
         const randomName = generateRandomString(20) + ext;
-        const url = `http://localhost:5000/static/images/${randomName}`;
+        const url = `https://lorenzsocmedserverapi.herokuapp.com/static/images/${randomName}`;
         const stream = createReadStream();
         const pathName = path.join(`./public/images/${randomName}`);
 
